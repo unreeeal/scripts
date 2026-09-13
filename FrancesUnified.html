@@ -3762,14 +3762,23 @@
             const pronoun = pick.p;
             const correct = conjugate(entry.verb, pronoun, tense);
 
+            // Frases em FRANCÊS, sem marcadores de tempo para servirem aos quatro
+            // tempos. {P} = pronome maiúsculo abrindo a frase; {Q} = "que" com
+            // elisão obrigatória antes de vogal (que il -> qu'il).
             const templates = [
-                "{p} {v} muito.",
-                "Hoje {p} {v} aqui.",
-                "Sempre {p} {v} bem.",
-                "Eu acho que {p} {v}."
+                "{P} {v} souvent.",
+                "{P} {v} bien.",
+                "{P} {v} ici.",
+                "{P} {v} beaucoup.",
+                "Je pense {Q} {v}."
             ];
             const temp = templates[Math.floor(Math.random() * templates.length)];
-            const questionText = temp.replace("{p}", pronounDisplay[pronoun]).replace("{v}", "____");
+            const shown = pronounDisplay[pronoun];
+            const queForm = /^[aeiou]/i.test(shown) ? "qu'" + shown : "que " + shown;
+            const questionText = temp
+                .replace("{P}", shown.charAt(0).toUpperCase() + shown.slice(1))
+                .replace("{Q}", queForm)
+                .replace("{v}", "____");
 
             current = {
                 domain: "conjugation", mode: "sentences", inputType: "choice",
